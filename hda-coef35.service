@@ -1,0 +1,23 @@
+[Unit]
+Description=Mirror the microphone-mute state to the HP 245 G10 F8 LED (ALC236 COEF 0x35)
+# Interim workaround: the F8 lamp is driven by COEF 0x35 bits 2-3 with an
+# inverted sense, and the kernel only writes it once the quirk
+# ALC236_FIXUP_HP_MUTE_LED_MICMUTE_COEF_INV (SSID 103c:8ba4) is available.
+# Remove this unit once the patched module is in the running kernel.
+Documentation=https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+After=sound.target
+Wants=sound.target
+
+[Service]
+Type=simple
+# 200 ms poll; the daemon retries until /dev/snd/hwC1D0 appears and
+# re-writes the COEF every few seconds, so it also survives resume.
+ExecStart=/usr/local/bin/hda-coef35 follow 200
+Restart=on-failure
+RestartSec=2
+Nice=10
+# the HDA hwdep node is root-only
+User=root
+
+[Install]
+WantedBy=multi-user.target
