@@ -3,6 +3,36 @@
 Everything about the first submission, so the repo can be tied back to the
 mailing-list thread and a `v2` can be built without guessing.
 
+## Status: applied upstream 2026-10-18
+
+Applied by Takashi Iwai to his `for-next` branch the day after it was mailed,
+with **no changes requested**.  The applied commit is the exact change that was
+mailed — `git patch-id --stable` gives `b8d7ce21a5d250317c670daf0a7428254b3e88c2`
+for both the sent patch and upstream's copy — with Takashi adding only his
+`Link:` trailer and his own `Signed-off-by:`.
+
+```
+commit 54f82c0614b10d70e0679e89aff622ed86598edb
+Author: Keane Mbae <keanembae@gmail.com>
+Date:   Sat, 17 Oct 2026 12:51:32 +0300
+
+    ALSA: hda/realtek: Add mic-mute LED quirk for the HP 245 14 inch G10
+
+https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git/commit/?id=54f82c0614b10d70e0679e89aff622ed86598edb
+```
+
+What that means in practice:
+
+- `for-next` is merged in the next merge window, so this ships in **Linux 7.4**.
+  The submission was based on `v7.3-rc7 + 244` (`58161ead29e5`), which is why
+  `for-next` — not `fix` — is the right target for a new quirk.
+- It carries no `Cc: stable@vger.kernel.org`, so **7.2.y and 7.3.y will not get
+  it**.  The stable rules allow a backport (`stable-kernel-rules.rst`: "…or just
+  add a device ID"), but that needs an explicit request; the patched module from
+  this repo covers the gap on the affected machine until then.
+- No reply to the "Applied" mail is needed; kernel practice is that thanking is
+  list noise.  Silence means done.
+
 ## What was sent
 
 ```
@@ -71,6 +101,9 @@ Kernel `7.2.9-2-cachyos`, HP 245 14 inch G10 (board 8BA4), codec ALC236 on card 
 - Patch: `checkpatch.pl --strict` → `0 errors, 0 warnings, 0 checks`.
 
 ## If a v2 is needed
+
+**Not needed here — v1 was applied as-is.**  Kept because the same recipe applies
+to the next quirk (e.g. a sibling model that turns out to need the same fixup).
 
 1. Edit `src/alc269.c` (or the patch directly), re-run
    `./prepare-submission.sh -n "Keane Mbae" -e keanembae@gmail.com -t`.
